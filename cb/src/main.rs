@@ -3,7 +3,6 @@ extern crate crossbeam;
 //use std::thread;
 use std::collections::VecDeque;
 
-
 fn main() {
     let people = [
         "Alice".to_string(),
@@ -15,17 +14,17 @@ fn main() {
     ];
 
     let mut queue: VecDeque<String> = VecDeque::new();
-//    let mut handles = Vec::new();
-//    let mut queue = &mut queue.clone();
 
     crossbeam::scope(|scope| {
         for person in &people {
-            let h = scope.spawn(|_| {
-                queue.push_back(person.to_string());
+            let mut queue = queue.clone();
+            let h = scope.spawn(move |_| {
+                println!("{:?}", person);
+//                queue.push_back(person.to_string());
             });
-            h.join();
+//            h.join();
         }
     }).unwrap();
 
-//    println!("{:?}", queue);
+    println!("{:?}", queue);
 }

@@ -142,5 +142,63 @@ error: Could not compile `standard`.
 To learn more, run the command again with --verbose.
 ```
 
+## crossbeamを使ってみる
+
+```rs
+extern crate crossbeam;
+
+//use std::thread;
+use std::collections::VecDeque;
+
+fn main() {
+    let people = [
+        "Alice".to_string(),
+        "Bob".to_string(),
+        "Carol".to_string(),
+        "Dave".to_string(),
+        "Ellen".to_string(),
+        "Frank".to_string(),
+    ];
+
+    crossbeam::scope(|scope| {
+        for person in &people {
+            let h = scope.spawn(move |_| {
+                println!("{:?}", person);
+            });
+        }
+    }).unwrap();
+}
+```
+
+これを実行すると以下のようになる。
+
+```zsh
+❯ cargo run
+    Finished dev [unoptimized + debuginfo] target(s) in 0.01s
+     Running `target/debug/cb`
+"Alice"
+"Frank"
+"Carol"
+"Ellen"
+"Dave"
+"Bob"
+```
+
+エラーもないし、実行ごとに出力される順番も違う。
+
+`crossbeam::thread`のシグネチャは以下のようになっている。
+
+```rs
+pub fn scope<'env, F, R>(f: F) -> thread::Result<R>
+where
+    F: FnOnce(&Scope<'env>) -> R,
+{
+// 中略
+}
+```
+
+ライフライム`'env`をもたせている。
+
+
 ## References
 - [Rust and Blockchain \- Speaker Deck](https://speakerdeck.com/osuke/rust-and-blockchain)
