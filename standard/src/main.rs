@@ -1,5 +1,5 @@
 use std::thread;
-use std::collections::VecDeque;
+// use std::collections::VecDeque;
 
 fn main() {
     let people = [
@@ -11,14 +11,15 @@ fn main() {
         "Frank".to_string(),
     ];
 
-    let mut queue: VecDeque<String> = VecDeque::new();
+    // let mut queue: VecDeque<String> = VecDeque::new();
     let mut handles = Vec::new();
 
     for person in &people {
-        let mut queue = queue.clone();
+        // let mut queue = queue.clone();
         handles.push(
             thread::spawn(move || {
-                queue.push_back(person.to_string());
+                // queue.push_back(person.to_string());
+                println!("{:?}", person);
             })
         )
     }
@@ -27,5 +28,5 @@ fn main() {
         h.join().unwrap()
     }
 
-    println!("{:?}", queue);
+    // println!("{:?}", queue);
 }
