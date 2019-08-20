@@ -19,10 +19,9 @@ fn main() {
     crossbeam::scope(|scope| {
         for person in &people {
 //            let mut queue = queue.clone();
-            let h = scope.spawn(move |_| {
+            scope.spawn(move |_| {
                 println!("{:?}", person);
-                let s: 'static String =  "1".to_string();
-                queue.push_back(s);
+                queue.push_back("1".to_owned());
 //                queue.push_back(person.clone());
             });
 //            h.join();
